@@ -10,14 +10,21 @@ public class TurretToAngleCommand extends CommandBase {
     // Initialize the subsystems, controllers, and the controllers values
     PIDController turretController = new PIDController(0.1, 0, 0);
     TurretSubsystem req_subsystem;
+    double desiredAngle;
     double turretSetpoint;
 
     public TurretToAngleCommand(TurretSubsystem subsystem, double angle) {
         // Establish the commands requirements and set the setters
         req_subsystem = subsystem;
         addRequirements(subsystem);
-        turretSetpoint = calcWhereToTurn(angle, req_subsystem.readTurretEncoder() - 119.0) + 119.0;
+        desiredAngle = angle;
         turretController.setTolerance(5, 2);
+    }
+
+    // In the initialize method set the setpoint
+    @Override
+    public void initialize() {
+        turretSetpoint = calcWhereToTurn(desiredAngle, req_subsystem.readTurretEncoder() - 119.0) + 119.0;
     }
 
     // In the execute method of this command move the turret based on the PID controllers readings
