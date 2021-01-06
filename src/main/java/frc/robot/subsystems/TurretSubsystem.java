@@ -43,6 +43,6 @@ public class TurretSubsystem extends SubsystemBase {
     public void simulationPeriodic() {
         simTurretMotor.update(0.020);
         simTurretEncoder.setDistance(Units.radiansToDegrees(simTurretMotor.getAngleRads()));
-        SmartDashboard.putNumber("Motor Angle", readTurretEncoder());
+        SmartDashboard.putNumber("Motor Angle", readTurretEncoder() - 119);
     }
 }

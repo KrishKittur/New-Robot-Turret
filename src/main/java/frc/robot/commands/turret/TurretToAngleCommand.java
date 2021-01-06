@@ -70,6 +70,4 @@ public class TurretToAngleCommand extends CommandBase {
         }
     }
 
-
-
 }
