@@ -10,7 +10,7 @@ public class ResetTurretCommand extends CommandBase {
     // Initialize the subsystems, controllers, and the controllers values
     PIDController turretController = new PIDController(0.1, 0, 0);
     TurretSubsystem req_subsystem;
-    double turretSetpoint = 119.0; // Set the setpoint to the 0 position offset
+    double turretSetpoint = 0.0; 
 
     // Command constructor
     public ResetTurretCommand(TurretSubsystem subsystem) {

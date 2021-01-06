@@ -34,15 +34,15 @@ public class TurretToJoystickAngleCommand extends CommandBase {
     @Override
     public void execute() {
         double joystickAngle = calculateJoystickAngle(joystickXSupplier.getAsDouble(), joystickYSupplier.getAsDouble());
-        turretSetpoint = calculateWhereToTurn(joystickAngle, req_subsystem.readTurretEncoder() - 119.0) + 119.0;
+        turretSetpoint = calculateWhereToTurn(joystickAngle, req_subsystem.readTurretEncoder());
         double outputPID = turretController.calculate(req_subsystem.readTurretEncoder(), turretSetpoint);
         req_subsystem.setTurretMotor(MathUtil.clamp(outputPID, -3, 3));
-        SmartDashboard.putNumber("Setpoint Angle", turretSetpoint - 119);
+        SmartDashboard.putNumber("Setpoint Angle", turretSetpoint);
 
         try {
           FileWriter turretWriter = new FileWriter("data.csv", true);
-          String stringTurretAngle = String.valueOf(req_subsystem.readTurretEncoder() - 119);
-          String stringTurretSetpointAngle = String.valueOf(turretSetpoint - 119);
+          String stringTurretAngle = String.valueOf(req_subsystem.readTurretEncoder());
+          String stringTurretSetpointAngle = String.valueOf(turretSetpoint);
           String stringTimeElapsed = String.valueOf(RobotController.getFPGATime());
           turretWriter.write(stringTurretAngle + ", " + stringTurretSetpointAngle + ", " + stringTimeElapsed + "\n");
           turretWriter.close();
@@ -91,13 +91,13 @@ public class TurretToJoystickAngleCommand extends CommandBase {
         double returnAngle = 0;
         if (Math.abs(joystickX) > 0.2 || Math.abs(joystickY) > 0.2) {
           if (joystickX > 0.0 && joystickY < 0.0) {
-            returnAngle = (90 - calculateQuadrantAngle(joystickX, joystickY)) * -1;
-          } else if (joystickX > 0.0 && joystickY > 0.0) {
-            returnAngle = (90 + calculateQuadrantAngle(joystickX, joystickY)) * -1;
-          } else if (joystickX < 0.0 && joystickY > 0.0) {
-            returnAngle = 90 + calculateQuadrantAngle(joystickX, joystickY);
-          } else if (joystickX < 0.0 && joystickY < 0.0) {
             returnAngle = 90 - calculateQuadrantAngle(joystickX, joystickY);
+          } else if (joystickX > 0.0 && joystickY > 0.0) {
+            returnAngle = 90 + calculateQuadrantAngle(joystickX, joystickY);
+          } else if (joystickX < 0.0 && joystickY > 0.0) {
+            returnAngle = (90 + calculateQuadrantAngle(joystickX, joystickY)) * -1;
+          } else if (joystickX < 0.0 && joystickY < 0.0) {
+            returnAngle = (90 - calculateQuadrantAngle(joystickX, joystickY)) * -1;
           }
         } else {
           returnAngle = 0.0;

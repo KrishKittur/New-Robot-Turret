@@ -29,7 +29,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     // Method to read the turret encoders values
     public double readTurretEncoder() {
-        return turretEncoder.getDistance();
+        return turretEncoder.getDistance() - 119.0;
     }
 
     // Method to set the turret motors speed 
@@ -43,6 +43,6 @@ public class TurretSubsystem extends SubsystemBase {
     public void simulationPeriodic() {
         simTurretMotor.update(0.020);
         simTurretEncoder.setDistance(Units.radiansToDegrees(simTurretMotor.getAngleRads()));
-        SmartDashboard.putNumber("Motor Angle", readTurretEncoder() - 119);
+        SmartDashboard.putNumber("Motor Angle", readTurretEncoder());
     }
 }
