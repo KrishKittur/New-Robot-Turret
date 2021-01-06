@@ -24,7 +24,7 @@ public class TurretToAngleCommand extends CommandBase {
     // In the initialize method set the setpoint
     @Override
     public void initialize() {
-        turretSetpoint = calcWhereToTurn(desiredAngle, req_subsystem.readTurretEncoder() - 119.0) + 119.0;
+        turretSetpoint = calcWhereToTurn(desiredAngle, req_subsystem.readTurretEncoder());
     }
 
     // In the execute method of this command move the turret based on the PID controllers readings

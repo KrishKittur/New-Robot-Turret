@@ -20,7 +20,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     // Method to read the turret encoders values
     public double readTurretEncoder() {
-        return turretEncoder.getDistance();
+        return turretEncoder.getDistance() - 119.0;
     }
 
     // Method to set the turret motors speed 
