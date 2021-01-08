@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TurretSubsystem extends SubsystemBase {
@@ -26,5 +27,11 @@ public class TurretSubsystem extends SubsystemBase {
     // Method to set the turret motors speed 
     public void setTurretMotor(double voltage) {
         turretMotor.setVoltage(voltage);
+    }
+
+    // Add turret's encoder readings to SmartDashboard
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Turret Angle", readTurretEncoder());
     }
 }

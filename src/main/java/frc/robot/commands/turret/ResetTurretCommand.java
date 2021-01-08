@@ -24,7 +24,7 @@ public class ResetTurretCommand extends CommandBase {
     @Override
     public void execute() {
         double outputPID = turretController.calculate(req_subsystem.readTurretEncoder(), turretSetpoint);
-        req_subsystem.setTurretMotor(MathUtil.clamp(outputPID, -3, 3));
+        req_subsystem.setTurretMotor(MathUtil.clamp(outputPID, -6, 6));
     }
 
     // If the turret controller is at its setpoint then stop the command

@@ -8,7 +8,7 @@ import frc.robot.subsystems.TurretSubsystem;
 public class TurretToAngleCommand extends CommandBase {
     
     // Initialize the subsystems, controllers, and the controllers values
-    PIDController turretController = new PIDController(0.1, 0, 0);
+    PIDController turretController = new PIDController(0.1, 0, 0.001);
     TurretSubsystem req_subsystem;
     double desiredAngle;
     double turretSetpoint;
@@ -25,13 +25,15 @@ public class TurretToAngleCommand extends CommandBase {
     @Override
     public void initialize() {
         turretSetpoint = calcWhereToTurn(desiredAngle, req_subsystem.readTurretEncoder());
+        System.out.println("Command Created");
     }
 
     // In the execute method of this command move the turret based on the PID controllers readings
     @Override
     public void execute() {
         double outputPID = turretController.calculate(req_subsystem.readTurretEncoder(), turretSetpoint);
-        req_subsystem.setTurretMotor(MathUtil.clamp(outputPID, -3, 3));
+        req_subsystem.setTurretMotor(MathUtil.clamp(outputPID, -5, 5));
+        System.out.println(outputPID + ", " + turretSetpoint);
     }
 
     // If the PID controller is at its setpoint then end the command
