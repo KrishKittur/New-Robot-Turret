@@ -1,13 +1,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.turret.ResetTurretCommand;
 import frc.robot.commands.turret.TurretToAngleCommand;
-import frc.robot.commands.turret.TurretToJoystickAngleCommand;
+import frc.robot.commands.turret.TurretToVisionAngleCommand;
 import frc.robot.subsystems.TurretSubsystem;
 
 public class RobotContainer {
@@ -25,36 +23,24 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(controller, Button.kB.value).whenPressed(
-      new TurretToAngleCommand(turretSubsystem, -45)
-    );
-
     new POVButton(controller, 90).whenPressed(
       new TurretToAngleCommand(turretSubsystem, -90)
-    );
-
-    new JoystickButton(controller, Button.kA.value).whenPressed(
-      new TurretToAngleCommand(turretSubsystem, -135)
     );
 
     new POVButton(controller, 180).whenPressed(
       new TurretToAngleCommand(turretSubsystem, -180)
     );
 
-    new JoystickButton(controller, Button.kX.value).whenPressed(
-      new TurretToAngleCommand(turretSubsystem, 135)
-    );
-
     new POVButton(controller, 270).whenPressed(
       new TurretToAngleCommand(turretSubsystem, 90)
     );
 
-    new JoystickButton(controller, Button.kY.value).whenPressed(
-      new TurretToAngleCommand(turretSubsystem, 45)
-    );
-
     new POVButton(controller, 0).whenPressed(
       new TurretToAngleCommand(turretSubsystem, 0)
+    );
+
+    new JoystickButton(controller, Button.kA.value).whenPressed(
+      new TurretToVisionAngleCommand(turretSubsystem)
     );
 
   }
