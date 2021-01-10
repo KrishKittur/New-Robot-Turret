@@ -1,5 +1,6 @@
 package frc.robot.commands.turret;
 
+import edu.wpi.first.wpilibj.MedianFilter;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
@@ -11,6 +12,7 @@ public class TurretToVisionAngleCommand extends CommandBase {
     PIDController turretController = new PIDController(0.1, 0, 0.001);
     TurretSubsystem req_subsystem;
     double turretSetpoint;
+    MedianFilter filter = new MedianFilter(7);
 
     public TurretToVisionAngleCommand(TurretSubsystem subsystem) {
         // Establish the commands requirements and set the setters
@@ -19,15 +21,14 @@ public class TurretToVisionAngleCommand extends CommandBase {
         turretController.setTolerance(5, 2);
     }
 
-    // In the initalize method set the setpoint
-    @Override
-    public void initialize() {
-        turretSetpoint = calcWhereToTurn(req_subsystem.readTurretEncoder() + req_subsystem.getTurretYaw(), req_subsystem.readTurretEncoder());
-    }
-
     // In the execute method set the turret motor based on the controllers readings
     @Override
     public void execute() {
+        var targetHeadingRelToTurret = req_subsystem.readTurretEncoder() + req_subsystem.getTurretYaw();
+        var averageHeading = filter.calculate(targetHeadingRelToTurret);
+
+        turretSetpoint = calcWhereToTurn(averageHeading, req_subsystem.getTurretYaw());
+
         double outputPID = turretController.calculate(req_subsystem.readTurretEncoder(), turretSetpoint);
         req_subsystem.setTurretMotor(MathUtil.clamp(outputPID, -5, 5));
         System.out.println(outputPID + ", " + turretSetpoint);
