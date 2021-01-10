@@ -22,7 +22,7 @@ public class TurretToVisionAngleCommand extends CommandBase {
     // In the initalize method set the setpoint
     @Override
     public void initialize() {
-        turretSetpoint = req_subsystem.readTurretEncoder() + req_subsystem.getTurretYaw();
+        turretSetpoint = calcWhereToTurn(req_subsystem.readTurretEncoder() + req_subsystem.getTurretYaw(), req_subsystem.readTurretEncoder());
     }
 
     // In the execute method set the turret motor based on the controllers readings
