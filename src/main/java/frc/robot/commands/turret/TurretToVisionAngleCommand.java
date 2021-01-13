@@ -1,5 +1,6 @@
 package frc.robot.commands.turret;
 
+import edu.wpi.first.wpilibj.MedianFilter;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
@@ -8,9 +9,10 @@ import frc.robot.subsystems.TurretSubsystem;
 public class TurretToVisionAngleCommand extends CommandBase {
     
     // Initialize the subsystems, controllers, and the controllers values
-    PIDController turretController = new PIDController(0.1, 0, 0.001);
+    PIDController turretController = new PIDController(0.07, 0, 0.0001);
     TurretSubsystem req_subsystem;
     double turretSetpoint;
+    MedianFilter filter = new MedianFilter(7);
 
     public TurretToVisionAngleCommand(TurretSubsystem subsystem) {
         // Establish the commands requirements and set the setters
@@ -19,15 +21,15 @@ public class TurretToVisionAngleCommand extends CommandBase {
         turretController.setTolerance(5, 2);
     }
 
-    // In the initalize method set the setpoint
-    @Override
-    public void initialize() {
-        turretSetpoint = calcWhereToTurn(req_subsystem.readTurretEncoder() + req_subsystem.getTurretYaw(), req_subsystem.readTurretEncoder());
-    }
-
-    // In the execute method set the turret motor based on the controllers readings
+    // In the execute method set the setpoint and turret motor based on the controllers readings/vision readings
     @Override
     public void execute() {
+
+        double desiredPosition = req_subsystem.readTurretEncoder() + req_subsystem.getTurretYaw();
+        double avgHeading = filter.calculate(desiredPosition);
+
+        turretSetpoint = calcWhereToTurn(avgHeading, req_subsystem.readTurretEncoder());
+
         double outputPID = turretController.calculate(req_subsystem.readTurretEncoder(), turretSetpoint);
         req_subsystem.setTurretMotor(MathUtil.clamp(outputPID, -5, 5));
         System.out.println(outputPID + ", " + turretSetpoint);
@@ -66,7 +68,7 @@ public class TurretToVisionAngleCommand extends CommandBase {
     // Function to return where the turret should turn, based on a given angle between the range of (-180, 180)
     static double calcWhereToTurnLogic(double angle, double currentTurretPosition) {
         double angleToReturn = 0.0;
-        if (angle > -135.0 && angle < 135.0) {
+        if (angle > -150.0 && angle < 150.0) {
             angleToReturn = angle;
         }
         else {

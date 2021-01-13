@@ -25,7 +25,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     // Method to read the turret encoders values
     public double readTurretEncoder() {
-        return turretEncoder.getDistance() - 119.0;
+        return turretEncoder.getDistance() - 131.0;
     }
 
     // Method to get the current yaw that vision in sending out

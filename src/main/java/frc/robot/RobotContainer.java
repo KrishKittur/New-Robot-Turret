@@ -39,7 +39,7 @@ public class RobotContainer {
       new TurretToAngleCommand(turretSubsystem, 0)
     );
 
-    new JoystickButton(controller, Button.kA.value).whenPressed(
+    new JoystickButton(controller, Button.kA.value).whileHeld(
       new TurretToVisionAngleCommand(turretSubsystem)
     );
 

@@ -45,7 +45,7 @@ public class TurretToAngleCommand extends CommandBase {
     // Function to return where the turret should turn, based on a given angle between the range of (-180, 180)
     static double calcWhereToTurn(double angle, double currentTurretPosition) {
         double angleToReturn = 0.0;
-        if (angle > -135.0 && angle < 135.0) {
+        if (angle > -150.0 && angle < 150.0) {
             angleToReturn = angle;
         } else {
             if (angle < 0.0) {
